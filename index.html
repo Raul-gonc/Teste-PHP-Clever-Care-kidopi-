@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados COVID-19</title>
+</head>
+<body>
+    <h1>Dados COVID-19</h1>
+    
+    <label for="selectPais">Selecione um país:</label>
+    <select id="selectPais">
+        <option value="Brasil">Brasil</option>
+        <option value="Canadá">Canadá</option>
+        <option value="Australia">Australia</option>
+    </select>
+
+    <div id="dadosContainer">
+        <!-- Os dados serão exibidos aqui -->
+    </div>
+
+    <script>
+        // Função para atualizar os dados quando um país é selecionado
+        function atualizarDados() {
+            var selectPais = document.getElementById('selectPais');
+            var paisSelecionado = selectPais.options[selectPais.selectedIndex].value;
+
+            // Faz uma requisição AJAX para obter os dados do país selecionado
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'getData.php?pais=' + paisSelecionado, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (!response.error) {
+                        // Atualiza a interface com os dados do país selecionado
+                        var dadosContainer = document.getElementById('dadosContainer');
+                        dadosContainer.innerHTML = '<h2>' + response.dadosFormatados.pais + '</h2>' +
+                            '<p>Mortes totais: ' + response.dadosFormatados.mortesTotais + '</p>' +
+                            '<p>Casos confirmados: ' + response.dadosFormatados.casosConfirmados + '</p>';
+                        
+                        // Adiciona os dados dos estados (opcional)
+                        if (response.dadosOriginais) {
+                            dadosContainer.innerHTML += '<h3>Dados dos Estados:</h3>';
+                            for (var estado in response.dadosOriginais) {
+                                dadosContainer.innerHTML += '<p>' +'<strong>'+ response.dadosOriginais[estado]['ProvinciaEstado']+'</strong>' + ': ' +
+                                    'Mortes: ' + response.dadosOriginais[estado]['Mortos'] +
+                                    ', Confirmados: ' + response.dadosOriginais[estado]['Confirmados'] +
+                                    '</p>';
+                            }
+                        }
+                    } else {
+                        alert(response.error);
+                    }
+                } else {
+                    alert('Erro ao carregar os dados.');
+                }
+            };
+            xhr.send();
+        }
+
+        // Chama a função para atualizar os dados ao carregar a página
+        window.onload = atualizarDados;
+
+        // Adiciona um evento para atualizar os dados quando um país é selecionado
+        document.getElementById('selectPais').addEventListener('change', atualizarDados);
+    </script>
+</body>
+</html>
