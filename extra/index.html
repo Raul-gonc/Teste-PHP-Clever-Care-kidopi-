@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados COVID-19</title>
+</head>
+<body>
+    <h1>Dados COVID-19</h1>
+    
+    <label for="selectPais1">Selecione um país:</label>
+    <select id="selectPais1">
+    </select>
+    <label for="selectPais2">Selecione outro país:</label>
+    <select id="selectPais2">
+    </select>
+
+
+    <div id="dadosContainer">
+        <!-- Os dados serão exibidos aqui -->
+    </div>
+
+    <script>
+        // Função para obter os paises disponiveis na api
+        function paisesDisponiveis() {
+
+            // Faz uma requisição AJAX para obter os dados do país selecionado
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://dev.kidopilabs.com.br/exercicio/covid.php?listar_paises=1', true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    //console.log(xhr.responseText)
+                    var response = JSON.parse(xhr.responseText);
+                    if (!response.error) {
+                        var dadosContainer1 = document.getElementById('selectPais1');
+                        var dadosContainer2 = document.getElementById('selectPais2');
+                        for (var pais in response) {
+                            console.log(response[pais]);
+                            dadosContainer1.innerHTML += "<option value="+ encodeURIComponent(response[pais]) +">"+ response[pais] +"</option>";
+                            dadosContainer2.innerHTML += "<option value="+ encodeURIComponent(response[pais]) +">"+ response[pais] +"</option>";
+                        }
+                    } else {
+                        alert(response.error);
+                    }
+                } else {
+                    alert('Erro ao carregar os dados.');
+                }
+            };
+            xhr.send();
+        }
+
+        function atualizarDados() {
+            var selectPais1 = document.getElementById('selectPais1').value;
+            var selectPais2 = document.getElementById('selectPais2').value;
+            console.log(selectPais2);
+            // Faz uma requisição AJAX para obter os dados da comparação
+            var xhr = new XMLHttpRequest();
+            //monta a url trantando valores
+            var url = 'getData.php?pais1=' + encodeURIComponent(selectPais1) + '&pais2=' + encodeURIComponent(selectPais2)
+            //console.log(url);
+            xhr.open('GET', url, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    console.log(xhr.responseText)
+                    var response = JSON.parse(xhr.responseText);
+                    if (!response.error) {
+                        // Atualiza a interface com os dados
+                        var dadosContainer = document.getElementById('dadosContainer');
+                        dadosContainer.innerHTML = "";
+                        for (var pais in response) {
+                            console.log(pais);
+                            dadosContainer.innerHTML += '<p>' +'<strong>'+ decodeURIComponent(pais)+'</strong>' + ': ' +
+                                'Mortes: ' + response[pais]['Mortes'] +
+                                ', Confirmados: ' + response[pais]['Confirmados'] +
+                                ', Taxa: ' + response[pais]['Taxa'] +
+                                '</p>';
+                        }
+                    } else {
+                        alert(response.error);
+                    }
+                } else {
+                    alert('Erro ao carregar os dados.');
+                }
+            };
+            xhr.send();
+        }
+
+        // Chama a função para atualizar os paises disponiveis ao carregar a página
+        window.onload = paisesDisponiveis;
+
+        // Adiciona eventos para atualizar os dados quando um país é selecionado
+        document.getElementById('selectPais1').addEventListener('change', atualizarDados);
+        document.getElementById('selectPais2').addEventListener('change', atualizarDados);
+    </script>
+</body>
+</html>

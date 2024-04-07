@@ -26,7 +26,9 @@
     <script>
         // Função para atualizar os dados quando um país é selecionado
         function atualizarDados() {
+            //chama get last para atualizar o rodapé antes de fazer uma nova solicitação
             getLast();
+            //obtem o valor selecionado
             var selectPais = document.getElementById('selectPais');
             var paisSelecionado = selectPais.options[selectPais.selectedIndex].value;
 
@@ -44,7 +46,7 @@
                             '<p>Mortes totais: ' + response.dadosFormatados.mortesTotais + '</p>' +
                             '<p>Casos confirmados: ' + response.dadosFormatados.casosConfirmados + '</p>';
                         
-                        // Adiciona os dados dos estados (opcional)
+                        // Adiciona os dados dos estados
                         if (response.dadosOriginais) {
                             dadosContainer.innerHTML += '<h3>Dados dos Estados:</h3>';
                             for (var estado in response.dadosOriginais) {
@@ -65,7 +67,7 @@
         }
 
         function getLast() {
-            // Faz uma requisição AJAX para obter os dados do país selecionado
+            // Faz uma requisição AJAX para obter o ultimo pais
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'lastRequest.php', true);
             xhr.onload = function() {
@@ -88,7 +90,7 @@
             xhr.send();
         }
 
-        // Chama a função para atualizar os dados ao carregar a página
+        // Chama a função para obter os dados da ultima request ao carregar a página
         window.onload = getLast;
 
         // Adiciona um evento para atualizar os dados quando um país é selecionado

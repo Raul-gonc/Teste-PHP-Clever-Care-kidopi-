@@ -1,14 +1,8 @@
 <?php
-
-    $database = array(
-        'Host' => 'localhost',
-        'User' => 'root',
-        'Password' => '',
-        'DBName' => 'kidopi'
-    );
+    require_once 'DB.php';
 
     //conecta ao banco
-    $conexao = mysqli_connect($database['Host'], $database['User'], $database['Password'], $database['DBName']);
+    $conexao = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
     //monta a querry
     $sqlQuerry = "SELECT pais, data_hora

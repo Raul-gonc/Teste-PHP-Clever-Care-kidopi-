@@ -1,4 +1,5 @@
 <?php
+
 // Função para obter os dados de um país específico
 function getData($pais) {
     // Define os URLs dos endpoints para os países predefinidos
@@ -58,45 +59,13 @@ function getData($pais) {
 }
 
 function saveRequest($pais) {
-    $database = array(
-        'Host' => 'localhost',
-        'User' => 'root',
-        'Password' => '',
-        'DBName' => 'kidopi'
-    );
-
+    require_once 'DB.php';
     //conecta ao banco
-    $conexao = mysqli_connect($database['Host'], $database['User'], $database['Password'], $database['DBName']);
+    $conexao = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
     $pais = mysqli_real_escape_string($conexao, $pais);
     //monta a querry
     $sqlQuerry = "INSERT INTO requests (pais) VALUES ('$pais')";
-
-    
-    //or die ("Configuração de Banco de Dados Errada!");
-    
-    $sql = mysqli_query($conexao, $sqlQuerry);
-
-    mysqli_close($conexao);
-}
-
-function lastRequest($pais) {
-    $database = array(
-        'Host' => 'localhost',
-        'User' => 'root',
-        'Password' => '',
-        'DBName' => 'kidopi'
-    );
-
-    //conecta ao banco
-    $conexao = mysqli_connect($database['Host'], $database['User'], $database['Password'], $database['DBName']);
-
-    $pais = mysqli_real_escape_string($conexao, $pais);
-    //monta a querry
-    $sqlQuerry = "INSERT INTO requests (pais) VALUES ('$pais')";
-
-    
-    //or die ("Configuração de Banco de Dados Errada!");
     
     $sql = mysqli_query($conexao, $sqlQuerry);
 
