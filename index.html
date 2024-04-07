@@ -19,9 +19,14 @@
         <!-- Os dados serão exibidos aqui -->
     </div>
 
+    <footer id="Rodapé">
+
+    </footer>
+
     <script>
         // Função para atualizar os dados quando um país é selecionado
         function atualizarDados() {
+            getLast();
             var selectPais = document.getElementById('selectPais');
             var paisSelecionado = selectPais.options[selectPais.selectedIndex].value;
 
@@ -30,6 +35,7 @@
             xhr.open('GET', 'getData.php?pais=' + paisSelecionado, true);
             xhr.onload = function() {
                 if (xhr.status == 200) {
+                    console.log(xhr.responseText)
                     var response = JSON.parse(xhr.responseText);
                     if (!response.error) {
                         // Atualiza a interface com os dados do país selecionado
@@ -58,8 +64,32 @@
             xhr.send();
         }
 
+        function getLast() {
+            // Faz uma requisição AJAX para obter os dados do país selecionado
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'lastRequest.php', true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    console.log(xhr.responseText)
+                    var response = JSON.parse(xhr.responseText);
+                    if (!response.error) {
+                        var footer = document.getElementById('Rodapé');
+                        footer.innerHTML =
+                            '<h4>Ultimo Pais: ' + response.pais + ' - ' +
+                            'Data e Hora: ' + response.data + '</h4>';
+                                                
+                    } else {
+                        alert(response.error);
+                    }
+                } else {
+                    alert('Erro ao carregar os dados.');
+                }
+            };
+            xhr.send();
+        }
+
         // Chama a função para atualizar os dados ao carregar a página
-        window.onload = atualizarDados;
+        window.onload = getLast;
 
         // Adiciona um evento para atualizar os dados quando um país é selecionado
         document.getElementById('selectPais').addEventListener('change', atualizarDados);

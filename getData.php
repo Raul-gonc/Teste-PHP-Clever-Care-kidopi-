@@ -24,6 +24,7 @@ function getData($pais) {
             header('Content-Type: application/json');
             echo json_encode(array("error" => "Erro ao acessar a API"));
         } else {
+            saveRequest($pais);
             // Inicializa as variáveis para armazenar os totais
             $mortesTotais = 0;
             $casosConfirmados = 0;
@@ -57,7 +58,49 @@ function getData($pais) {
 }
 
 function saveRequest($pais) {
-    //aqui vai a logica para salvar no banco
+    $database = array(
+        'Host' => 'localhost',
+        'User' => 'root',
+        'Password' => '',
+        'DBName' => 'kidopi'
+    );
+
+    //conecta ao banco
+    $conexao = mysqli_connect($database['Host'], $database['User'], $database['Password'], $database['DBName']);
+
+    $pais = mysqli_real_escape_string($conexao, $pais);
+    //monta a querry
+    $sqlQuerry = "INSERT INTO requests (pais) VALUES ('$pais')";
+
+    
+    //or die ("Configuração de Banco de Dados Errada!");
+    
+    $sql = mysqli_query($conexao, $sqlQuerry);
+
+    mysqli_close($conexao);
+}
+
+function lastRequest($pais) {
+    $database = array(
+        'Host' => 'localhost',
+        'User' => 'root',
+        'Password' => '',
+        'DBName' => 'kidopi'
+    );
+
+    //conecta ao banco
+    $conexao = mysqli_connect($database['Host'], $database['User'], $database['Password'], $database['DBName']);
+
+    $pais = mysqli_real_escape_string($conexao, $pais);
+    //monta a querry
+    $sqlQuerry = "INSERT INTO requests (pais) VALUES ('$pais')";
+
+    
+    //or die ("Configuração de Banco de Dados Errada!");
+    
+    $sql = mysqli_query($conexao, $sqlQuerry);
+
+    mysqli_close($conexao);
 }
 
 // Verifica se o parâmetro 'pais' foi enviado na solicitação
