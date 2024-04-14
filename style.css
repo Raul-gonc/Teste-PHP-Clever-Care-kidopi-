@@ -1,0 +1,29 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+#dadosContainer {
+    margin-top: 20px;
+    border: 2px solid black; 
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#dadosContainer:empty {
+    display: none;
+}
+
+
+#selector{
+    border: 2px solid black; 
+    border-radius: 10px;
+    padding: 20px;
+}
+
+footer {
+    margin-top: 20px;
+}

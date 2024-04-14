@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Dados COVID-19</title>
 </head>
 <body>
-    <h1>Dados COVID-19</h1>
+    <a href="extra/index.html">Veja o Teste Extra</a>
+    <h2>Dados COVID-19 - TESTE BASICO</h2>
+    
     
     <label for="selectPais">Selecione um país:</label>
     <select id="selectPais">
@@ -15,13 +18,13 @@
         <option value="Australia">Australia</option>
     </select>
 
-    <div id="dadosContainer">
-        <!-- Os dados serão exibidos aqui -->
-    </div>
+    <div id="dadosContainer"></div>
 
     <footer id="Rodapé">
 
     </footer>
+   
+
 
     <script>
         // Função para atualizar os dados quando um país é selecionado
@@ -43,16 +46,16 @@
                         // Atualiza a interface com os dados do país selecionado
                         var dadosContainer = document.getElementById('dadosContainer');
                         dadosContainer.innerHTML = '<h2>' + response.dadosFormatados.pais + '</h2>' +
-                            '<p>Mortes totais: ' + response.dadosFormatados.mortesTotais + '</p>' +
-                            '<p>Casos confirmados: ' + response.dadosFormatados.casosConfirmados + '</p>';
+                            '<p><strong>Mortes totais:</strong> ' + response.dadosFormatados.mortesTotais.toLocaleString() + '</p>' +
+                            '<p><strong>Casos confirmados:</strong> ' + response.dadosFormatados.casosConfirmados.toLocaleString() + '</p>';
                         
                         // Adiciona os dados dos estados
                         if (response.dadosOriginais) {
                             dadosContainer.innerHTML += '<h3>Dados dos Estados:</h3>';
                             for (var estado in response.dadosOriginais) {
                                 dadosContainer.innerHTML += '<p>' +'<strong>'+ response.dadosOriginais[estado]['ProvinciaEstado']+'</strong>' + ': ' +
-                                    'Mortes: ' + response.dadosOriginais[estado]['Mortos'] +
-                                    ', Confirmados: ' + response.dadosOriginais[estado]['Confirmados'] +
+                                    'Mortes: ' + response.dadosOriginais[estado]['Mortos'].toLocaleString() +
+                                    ', Confirmados: ' + response.dadosOriginais[estado]['Confirmados'].toLocaleString() +
                                     '</p>';
                             }
                         }

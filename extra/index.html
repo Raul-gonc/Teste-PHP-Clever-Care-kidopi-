@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
     <title>Dados COVID-19</title>
 </head>
 <body>
-    <h1>Dados COVID-19</h1>
+    <a href="../index.html">Veja o Teste Basico</a>
+    <h2>Comparar Dados COVID-19 - TESTE EXTRA</h2>
     
-    <label for="selectPais1">Selecione um país:</label>
-    <select id="selectPais1">
-    </select>
-    <label for="selectPais2">Selecione outro país:</label>
-    <select id="selectPais2">
-    </select>
-
-
-    <div id="dadosContainer">
-        <!-- Os dados serão exibidos aqui -->
+    <div id="selector">
+        <label for="selectPais1">Selecione um país:</label>
+        </br>
+        <select id="selectPais1">
+        </select>
+        </br>
+        <label for="selectPais2">Selecione outro país:</label>
+        </br>
+        <select id="selectPais2">
+        </select>
     </div>
+    
+
+
+    <div id="dadosContainer"></div>
 
     <script>
         // Função para obter os paises disponiveis na api
@@ -53,7 +59,7 @@
             var selectPais1 = document.getElementById('selectPais1').value;
             var selectPais2 = document.getElementById('selectPais2').value;
             console.log(selectPais2);
-            // Faz uma requisição AJAX para obter os dados da comparação
+            // Faz uma requisição para obter os dados da comparação
             var xhr = new XMLHttpRequest();
             //monta a url trantando valores
             var url = 'getData.php?pais1=' + encodeURIComponent(selectPais1) + '&pais2=' + encodeURIComponent(selectPais2)
@@ -64,16 +70,27 @@
                     console.log(xhr.responseText)
                     var response = JSON.parse(xhr.responseText);
                     if (!response.error) {
+                        var taxas = [];
                         // Atualiza a interface com os dados
                         var dadosContainer = document.getElementById('dadosContainer');
                         dadosContainer.innerHTML = "";
                         for (var pais in response) {
                             console.log(pais);
+                            taxas.push(response[pais]['Taxa']);
                             dadosContainer.innerHTML += '<p>' +'<strong>'+ decodeURIComponent(pais)+'</strong>' + ': ' +
-                                'Mortes: ' + response[pais]['Mortes'] +
-                                ', Confirmados: ' + response[pais]['Confirmados'] +
-                                ', Taxa: ' + response[pais]['Taxa'] +
+                                '</br>Mortes: ' + response[pais]['Mortes'].toLocaleString() +
+                                '</br>Confirmados: ' + response[pais]['Confirmados'].toLocaleString() +
+                                '</br>Taxa: ' + response[pais]['Taxa'] +
                                 '</p>';
+                        }
+                        if(taxas.length == 2){
+                            var diferenca;
+                            if(taxas[0] > taxas[1]){
+                                diferenca = taxas[0] - taxas[1]
+                            }else{
+                                diferenca = taxas[1] - taxas[0]
+                            }
+                            dadosContainer.innerHTML += '<p>' +'<strong>'+"Difirença das Taxas: "+ diferenca +'</strong>'+'</p>';
                         }
                     } else {
                         alert(response.error);
